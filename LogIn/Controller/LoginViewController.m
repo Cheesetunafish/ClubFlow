@@ -7,36 +7,67 @@
 
 #import "LoginViewController.h"
 #import "Masonry.h"
-#import "UIColot+Hex.h"
+#import "UIColor+Hex.h"
+#import "MyTextField.h"
+
 
 @interface LoginViewController ()
 /// Title
 @property (nonatomic, strong) UITextView *Title;
 /// subTitle
 @property (nonatomic, strong) UITextView *subTitle;
-/// 账号输入
-@property (nonatomic, strong) UITextField *emailField;
-/// 密码输入
-@property (nonatomic, strong) UITextField *passwordField;
+/// 账号输入框
+@property (nonatomic, strong) MyTextField *emailField;
+/// 密码输入框
+@property (nonatomic, strong) MyTextField *passwordField;
 /// 登录按钮
 @property (nonatomic, strong) UIButton *loginButton;
+
 
 @end
 
 @implementation LoginViewController
 
+#pragma mark - viewDidLoad
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+    self.view.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:self.Title];
     [self.view addSubview:self.subTitle];
     [self.view addSubview:self.emailField];
-    self.view.backgroundColor = [UIColor whiteColor];
+    [self.view addSubview:self.passwordField];
+    [self.view addSubview:self.loginButton];
+    
+    [self rightViewGesture:self.passwordField.rightView];
     [self masMakePosition];
+    
+    
+    self.emailField.alpha = 0;
+    self.passwordField.alpha = 0;
+    self.loginButton.alpha = 0;
+
+    self.emailField.transform = CGAffineTransformMakeScale(0.5, 0.5);
+    self.passwordField.transform = CGAffineTransformMakeScale(0.5, 0.5);
+    self.loginButton.transform = CGAffineTransformMakeScale(0.5, 0.5);
+
+    [UIView animateWithDuration:0.6 delay:0.2 usingSpringWithDamping:0.6 initialSpringVelocity:1 options:UIViewAnimationOptionCurveEaseOut animations:^{
+            self.emailField.alpha = 1;
+            self.emailField.transform = CGAffineTransformIdentity;
+        } completion:^(BOOL finished) {
+            [UIView animateWithDuration:0.6 delay:0.2 usingSpringWithDamping:0.6 initialSpringVelocity:1 options:UIViewAnimationOptionCurveEaseOut animations:^{
+                self.passwordField.alpha = 1;
+                self.passwordField.transform = CGAffineTransformIdentity;
+            } completion:^(BOOL finished) {
+                [UIView animateWithDuration:0.6 delay:0.2 usingSpringWithDamping:0.6 initialSpringVelocity:1 options:UIViewAnimationOptionCurveEaseOut animations:^{
+                    self.loginButton.alpha = 1;
+                    self.loginButton.transform = CGAffineTransformIdentity;
+                } completion:nil];
+            }];
+        }];
     
 }
 
-
+#pragma mark - Masonry
 // Masonry布局和视图加载
 - (void)masMakePosition {
     [self.Title mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -57,8 +88,23 @@
         make.height.mas_equalTo(45);
         make.top.equalTo(self.subTitle.mas_bottom).mas_offset(20);
     }];
+    [self.passwordField mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.emailField);
+        make.right.equalTo(self.emailField);
+        make.height.mas_equalTo(45);
+        make.top.equalTo(self.emailField.mas_bottom).mas_offset(20);
+    }];
+    [self.loginButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.equalTo(self.view);
+        make.top.equalTo(self.passwordField.mas_bottom).mas_offset(40);
+        make.width.mas_equalTo(60.02);
+        make.height.mas_equalTo(44);
+    }];
    
 }
+
+#pragma mark - Animation
+
 
 #pragma mark - Lazy Load
 - (UITextView *)Title {
@@ -82,28 +128,54 @@
     return _subTitle;
 }
 
-- (UITextField *)emailField {
+- (MyTextField *)emailField {
     if (_emailField == nil) {
-        _emailField = [[UITextField alloc] init];
-        _emailField.backgroundColor = [UIColor colorWithHexString:@"F3F4F6"];
+        _emailField = [[MyTextField alloc] init];
         _emailField.placeholder = @"请输入邮箱账号...";
+        _emailField.leftViewMode = UITextFieldViewModeAlways;
         _emailField.leftView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"LoginTextfieldEmail"]];
     }
     return _emailField;
 }
 
-- (UITextField *)passwordField {
+- (MyTextField *)passwordField {
     if (_passwordField == nil) {
-        _passwordField = [[UITextField alloc] init];
-        _passwordField.backgroundColor = [UIColor colorWithHexString:@"F3F4F6"];
+        _passwordField = [[MyTextField alloc] init];
         _passwordField.placeholder = @"请输入密码...";
         _passwordField.secureTextEntry = YES;
+        _passwordField.leftViewMode = UITextFieldViewModeAlways;
         _passwordField.leftView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"LoginTextfieldPassword"]];
+        _passwordField.rightViewMode = UITextFieldViewModeAlways;
+        _passwordField.rightView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"LoginTextfieldPasswordRight"]];
     }
     return _passwordField;
 }
 
-#pragma mark - Masonry
+
+- (UIButton *)loginButton {
+    if (_loginButton == nil) {
+        _loginButton = [[UIButton alloc] init];
+        _loginButton.backgroundColor = [UIColor colorWithHexString:@"0066FF"];
+        [_loginButton setTitle:@"登录" forState:UIControlStateNormal];
+        _loginButton.titleLabel.textColor = [UIColor whiteColor];
+        _loginButton.titleLabel.font = [UIFont boldSystemFontOfSize:15];
+        _loginButton.layer.cornerRadius = 20;
+        _loginButton.layer.masksToBounds = YES;
+    }
+    return _loginButton;
+}
+
+#pragma mark - action
+- (void)rightViewGesture:(UIView *)rightView {
+    rightView.userInteractionEnabled = YES;
+    UITapGestureRecognizer *click = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(hidePasswd)];
+    [rightView addGestureRecognizer:click];
+}
+
+- (void)hidePasswd {
+    self.passwordField.secureTextEntry = !self.passwordField.isSecureTextEntry;
+}
+
 
 /*
 #pragma mark - Navigation

@@ -1,11 +1,11 @@
 //
-//  UIColot+Hex.m
+//  UIColor+Hex.m
 //  ClubFlow
 //
 //  Created by Shea Cheese on 2025/3/10.
 //
 
-#import "UIColot+Hex.h"
+#import "UIColor+Hex.h"
  
 @implementation UIColor (Hex)
  

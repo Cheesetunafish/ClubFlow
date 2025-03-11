@@ -1,5 +1,5 @@
 //
-//  UIColot+Hex.h
+//  UIColor+Hex.h
 //  ClubFlow
 //
 //  Created by Shea Cheese on 2025/3/10.
