@@ -14,6 +14,7 @@
     self = [super init];
     if (self) {
         [self initStyle];
+        
     }
     return self;
 }
@@ -34,12 +35,19 @@
     return self;
 }
 
-// 灰色，圆角
 - (void)initStyle {
     self.backgroundColor = [UIColor colorWithHexString:@"F3F4F6"];
     self.layer.cornerRadius = 10;
-    
-    
+}
+
+- (void)rightViewGesture:(UIView *)rightView {
+    rightView.userInteractionEnabled = YES;
+    UITapGestureRecognizer *click = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(hidePasswd)];
+    [rightView addGestureRecognizer:click];
+}
+
+- (void)hidePasswd {
+    self.secureTextEntry = !self.isSecureTextEntry;
 }
 
 #pragma mark - Rewrite

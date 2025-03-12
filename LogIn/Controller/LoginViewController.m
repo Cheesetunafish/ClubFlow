@@ -6,6 +6,7 @@
 //
 
 #import "LoginViewController.h"
+#import "SigninViewController.h"
 #import "Masonry.h"
 #import "UIColor+Hex.h"
 #import "MyTextField.h"
@@ -22,6 +23,10 @@
 @property (nonatomic, strong) MyTextField *passwordField;
 /// 登录按钮
 @property (nonatomic, strong) UIButton *loginButton;
+/// 注册按钮
+@property (nonatomic, strong) UIButton *signinButton;
+/// signinPage
+@property (nonatomic, strong) SigninViewController *signinPage;
 
 
 @end
@@ -37,33 +42,10 @@
     [self.view addSubview:self.emailField];
     [self.view addSubview:self.passwordField];
     [self.view addSubview:self.loginButton];
+    [self.view addSubview:self.signinButton];
     
-    [self rightViewGesture:self.passwordField.rightView];
     [self masMakePosition];
-    
-    
-    self.emailField.alpha = 0;
-    self.passwordField.alpha = 0;
-    self.loginButton.alpha = 0;
-
-    self.emailField.transform = CGAffineTransformMakeScale(0.5, 0.5);
-    self.passwordField.transform = CGAffineTransformMakeScale(0.5, 0.5);
-    self.loginButton.transform = CGAffineTransformMakeScale(0.5, 0.5);
-
-    [UIView animateWithDuration:0.6 delay:0.2 usingSpringWithDamping:0.6 initialSpringVelocity:1 options:UIViewAnimationOptionCurveEaseOut animations:^{
-            self.emailField.alpha = 1;
-            self.emailField.transform = CGAffineTransformIdentity;
-        } completion:^(BOOL finished) {
-            [UIView animateWithDuration:0.6 delay:0.2 usingSpringWithDamping:0.6 initialSpringVelocity:1 options:UIViewAnimationOptionCurveEaseOut animations:^{
-                self.passwordField.alpha = 1;
-                self.passwordField.transform = CGAffineTransformIdentity;
-            } completion:^(BOOL finished) {
-                [UIView animateWithDuration:0.6 delay:0.2 usingSpringWithDamping:0.6 initialSpringVelocity:1 options:UIViewAnimationOptionCurveEaseOut animations:^{
-                    self.loginButton.alpha = 1;
-                    self.loginButton.transform = CGAffineTransformIdentity;
-                } completion:nil];
-            }];
-        }];
+    [self showUpAnimation];
     
 }
 
@@ -100,11 +82,47 @@
         make.width.mas_equalTo(60.02);
         make.height.mas_equalTo(44);
     }];
-   
+    [self.signinButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.equalTo(self.view);
+        make.width.mas_equalTo(335);
+        make.height.mas_equalTo(30);
+        make.top.equalTo(self.loginButton.mas_bottom).mas_offset(10);
+    }];
 }
 
 #pragma mark - Animation
+- (void)showUpAnimation {
+    self.emailField.alpha = 0;
+    self.passwordField.alpha = 0;
+    self.loginButton.alpha = 0;
+    self.signinButton.alpha = 0;
 
+    self.emailField.transform = CGAffineTransformMakeScale(0.5, 0.5);
+    self.passwordField.transform = CGAffineTransformMakeScale(0.5, 0.5);
+    self.loginButton.transform = CGAffineTransformMakeScale(0.5, 0.5);
+    self.signinButton.transform = CGAffineTransformMakeScale(0.5, 0.5);
+
+    [UIView animateWithDuration:0.6 delay:0.2 usingSpringWithDamping:0.6 initialSpringVelocity:1 options:UIViewAnimationOptionCurveEaseOut animations:^{
+            self.emailField.alpha = 1;
+            self.emailField.transform = CGAffineTransformIdentity;
+        } completion:^(BOOL finished) {
+            [UIView animateWithDuration:0.6 delay:0.2 usingSpringWithDamping:0.6 initialSpringVelocity:1 options:UIViewAnimationOptionCurveEaseOut animations:^{
+                self.passwordField.alpha = 1;
+                self.passwordField.transform = CGAffineTransformIdentity;
+            } completion:^(BOOL finished) {
+                [UIView animateWithDuration:0.6 delay:0.2 usingSpringWithDamping:0.6 initialSpringVelocity:1 options:UIViewAnimationOptionCurveEaseOut animations:^{
+                    self.loginButton.alpha = 1;
+                    self.loginButton.transform = CGAffineTransformIdentity;
+                } completion:^(BOOL finished) {
+                    [UIView animateWithDuration:0.6 delay:0.2 usingSpringWithDamping:0.6 initialSpringVelocity:1 options:UIViewAnimationOptionCurveEaseOut animations:^{
+                        self.signinButton.alpha = 1;
+                        self.signinButton.transform = CGAffineTransformIdentity;
+                    } completion:nil];
+                }];
+            }];
+        }];
+    
+}
 
 #pragma mark - Lazy Load
 - (UITextView *)Title {
@@ -147,6 +165,7 @@
         _passwordField.leftView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"LoginTextfieldPassword"]];
         _passwordField.rightViewMode = UITextFieldViewModeAlways;
         _passwordField.rightView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"LoginTextfieldPasswordRight"]];
+        [_passwordField rightViewGesture:_passwordField.rightView];
     }
     return _passwordField;
 }
@@ -157,7 +176,6 @@
         _loginButton = [[UIButton alloc] init];
         _loginButton.backgroundColor = [UIColor colorWithHexString:@"0066FF"];
         [_loginButton setTitle:@"登录" forState:UIControlStateNormal];
-        _loginButton.titleLabel.textColor = [UIColor whiteColor];
         _loginButton.titleLabel.font = [UIFont boldSystemFontOfSize:15];
         _loginButton.layer.cornerRadius = 20;
         _loginButton.layer.masksToBounds = YES;
@@ -165,15 +183,36 @@
     return _loginButton;
 }
 
-#pragma mark - action
-- (void)rightViewGesture:(UIView *)rightView {
-    rightView.userInteractionEnabled = YES;
-    UITapGestureRecognizer *click = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(hidePasswd)];
-    [rightView addGestureRecognizer:click];
+- (UIButton *)signinButton {
+    if (_signinButton == nil) {
+        _signinButton = [[UIButton alloc] init];
+        [_signinButton setTitle:@"还没有账号？立即注册" forState:UIControlStateNormal];
+        [_signinButton setTitleColor:[UIColor colorWithHexString:@"007AFF"] forState:UIControlStateNormal];
+        _signinButton.titleLabel.font = [UIFont systemFontOfSize:15];
+        [_signinButton addTarget:self action:@selector(jumpToSignPage) forControlEvents:UIControlEventTouchUpInside];
+        _signinButton.titleLabel.textAlignment = NSTextAlignmentCenter;
+    }
+    return _signinButton;
 }
 
-- (void)hidePasswd {
-    self.passwordField.secureTextEntry = !self.passwordField.isSecureTextEntry;
+- (SigninViewController *)signinPage {
+    if (_signinPage == nil) {
+        _signinPage = [[SigninViewController alloc] init];
+    }
+    return _signinPage;
+}
+
+#pragma mark - action
+- (void)jumpToSignPage {
+    NSLog(@"jumpready");
+    NSLog(@"navigationController: %@", self.navigationController);
+
+    if (self.signinPage) {
+        [self.navigationController pushViewController:self.signinPage animated:YES];
+    } else {
+        NSLog(@"self.signinPage is nil!");
+    }
+
 }
 
 

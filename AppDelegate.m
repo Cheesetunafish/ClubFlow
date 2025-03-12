@@ -7,6 +7,7 @@
 
 #import "AppDelegate.h"
 #import "LoginViewController.h"
+@import FirebaseCore;
 
 @interface AppDelegate ()
 
@@ -16,9 +17,14 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    // Firebase认证
+    [FIRApp configure];
+    
     // Override point for customization after application launch.
+    
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    self.window.rootViewController = [[LoginViewController alloc] init];
+    self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[[LoginViewController alloc] init]];
+
     [self.window makeKeyAndVisible];
     
     return YES;

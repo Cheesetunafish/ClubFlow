@@ -10,7 +10,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface MyTextField : UITextField
-
+- (void)rightViewGesture:(UIView *)rightView;
 @end
 
 NS_ASSUME_NONNULL_END
