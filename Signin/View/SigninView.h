@@ -11,7 +11,16 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface SigninView : UIView
-
+/// titile
+@property (nonatomic, strong) UIImageView *titleImage;
+/// 账号输入框
+@property (nonatomic, strong) MyTextField *emailField;
+/// 设置密码框
+@property (nonatomic, strong) MyTextField *firstPasswdField;
+/// 确认密码
+@property (nonatomic, strong) MyTextField *confirmPasswdField;
+/// 验证码
+@property (nonatomic, strong) MyTextField *verifyField;
 /// 发送验证码按钮
 @property (nonatomic, strong) UIButton *sendVerityButton;
 /// 立即注册
