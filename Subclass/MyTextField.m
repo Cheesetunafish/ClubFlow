@@ -65,15 +65,25 @@
 }
 
 - (CGRect)textRectForBounds:(CGRect)bounds {
-    return CGRectInset(bounds, 45, 5);
+    if (self.leftViewMode == UITextFieldViewModeAlways) {
+        return CGRectInset(bounds, 45, 5);
+    }
+    return CGRectInset(bounds, 15, 5);
 }
+    
 
 - (CGRect)editingRectForBounds:(CGRect)bounds {
-    return CGRectInset(bounds, 45, 5);
+    if (self.leftViewMode == UITextFieldViewModeAlways) {
+        return CGRectInset(bounds, 45, 5);
+    }
+    return CGRectInset(bounds, 15, 5);
 }
 
 - (CGRect)placeholderRectForBounds:(CGRect)bounds {
-    return CGRectInset(bounds, 45, 5);
+    if (self.leftViewMode == UITextFieldViewModeAlways) {
+        return CGRectInset(bounds, 45, 5);
+    }
+    return CGRectInset(bounds, 15, 5);
 }
 
 

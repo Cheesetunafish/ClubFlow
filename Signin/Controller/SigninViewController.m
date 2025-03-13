@@ -6,17 +6,11 @@
 //
 
 #import "SigninViewController.h"
-#import "MyTextField.h"
-
+#import "SigninView.h"
 @interface SigninViewController ()
 
-/// 账号输入框
-@property (nonatomic, strong) MyTextField *emailField;
-/// 设置密码框
-@property (nonatomic, strong) MyTextField *firstPasswdField;
-/// 确认密码
-@property (nonatomic, strong) MyTextField *confirmPasswdField;
-
+/// view
+@property (nonatomic, strong) SigninView *signinView;
 
 @end
 
@@ -24,23 +18,26 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.view.backgroundColor = [UIColor whiteColor];
+
     self.navigationItem.title = @"注册账号";
+    self.view = self.signinView;
     
-    // Do any additional setup after loading the view.
 }
+
 
 #pragma mark - Lazy Load
-
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+- (SigninView *)signinView {
+    if (_signinView == nil) {
+        _signinView = [[SigninView alloc] initWithFrame:self.view.frame];
+        [_signinView.loginButton addTarget:self action:@selector(backToLoginPage) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _signinView;
 }
-*/
+
+#pragma mark - action
+- (void)backToLoginPage {
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
 
 @end
