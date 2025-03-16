@@ -32,12 +32,12 @@
 #pragma mark - Animation
 - (void)showUpAnimation {
     self.loginView.emailField.alpha = 0;
-    self.loginView.passwordField.alpha = 0;
+//    self.loginView.passwordField.alpha = 0;
     self.loginView.loginButton.alpha = 0;
     self.loginView.signinButton.alpha = 0;
 
     self.loginView.emailField.transform = CGAffineTransformMakeScale(0.5, 0.5);
-    self.loginView.passwordField.transform = CGAffineTransformMakeScale(0.5, 0.5);
+//    self.loginView.passwordField.transform = CGAffineTransformMakeScale(0.5, 0.5);
     self.loginView.loginButton.transform = CGAffineTransformMakeScale(0.5, 0.5);
     self.loginView.signinButton.transform = CGAffineTransformMakeScale(0.5, 0.5);
 
@@ -46,8 +46,8 @@
         self.loginView.emailField.transform = CGAffineTransformIdentity;
         } completion:^(BOOL finished) {
             [UIView animateWithDuration:0.6 delay:0.2 usingSpringWithDamping:0.6 initialSpringVelocity:1 options:UIViewAnimationOptionCurveEaseOut animations:^{
-                self.loginView.passwordField.alpha = 1;
-                self.loginView.passwordField.transform = CGAffineTransformIdentity;
+//                self.loginView.passwordField.alpha = 1;
+//                self.loginView.passwordField.transform = CGAffineTransformIdentity;
             } completion:^(BOOL finished) {
                 [UIView animateWithDuration:0.6 delay:0.2 usingSpringWithDamping:0.6 initialSpringVelocity:1 options:UIViewAnimationOptionCurveEaseOut animations:^{
                     self.loginView.loginButton.alpha = 1;

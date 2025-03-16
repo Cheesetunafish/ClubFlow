@@ -37,8 +37,8 @@
     self.backgroundColor = [UIColor whiteColor];
     [self addSubview:self.titleImage];
     [self addSubview:self.emailField];
-    [self addSubview:self.firstPasswdField];
-    [self addSubview:self.confirmPasswdField];
+//    [self addSubview:self.firstPasswdField];
+//    [self addSubview:self.confirmPasswdField];
     [self addSubview:self.verifyField];
     [self addSubview:self.sendVerityButton];
     [self addSubview:self.signInButton];
@@ -63,25 +63,25 @@
         make.top.equalTo(self.titleImage.mas_bottom).mas_offset(40);
     }];
     
-    [self.firstPasswdField mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerX.equalTo(self);
-        make.width.mas_equalTo(327);
-        make.height.mas_equalTo(48);
-        make.top.equalTo(self.emailField.mas_bottom).mas_offset(20);
-    }];
+//    [self.firstPasswdField mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.centerX.equalTo(self);
+//        make.width.mas_equalTo(327);
+//        make.height.mas_equalTo(48);
+//        make.top.equalTo(self.emailField.mas_bottom).mas_offset(20);
+//    }];
     
-    [self.confirmPasswdField mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerX.equalTo(self);
-        make.width.mas_equalTo(327);
-        make.height.mas_equalTo(48);
-        make.top.equalTo(self.firstPasswdField.mas_bottom).mas_offset(20);
-    }];
+//    [self.confirmPasswdField mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.centerX.equalTo(self);
+//        make.width.mas_equalTo(327);
+//        make.height.mas_equalTo(48);
+//        make.top.equalTo(self.firstPasswdField.mas_bottom).mas_offset(20);
+//    }];
     
     [self.verifyField mas_makeConstraints:^(MASConstraintMaker *make) {
         make.width.mas_equalTo(213);
         make.height.mas_equalTo(48);
-        make.left.equalTo(self.confirmPasswdField);
-        make.top.equalTo(self.confirmPasswdField.mas_bottom).mas_offset(20);
+        make.left.equalTo(self.emailField);
+        make.top.equalTo(self.emailField.mas_bottom).mas_offset(20);
     }];
     [self.sendVerityButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.equalTo(self.verifyField);
@@ -126,28 +126,28 @@
     return _emailField;
 }
 
-- (MyTextField *)firstPasswdField {
-    if (_firstPasswdField == nil) {
-        _firstPasswdField = [[MyTextField alloc] init];
-        _firstPasswdField.placeholder = @"请设置密码";
-        _firstPasswdField.rightViewMode = UITextFieldViewModeAlways;
-        _firstPasswdField.rightView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"SigninTextfieldPassword"]];
-        [_firstPasswdField rightViewGesture:_firstPasswdField.rightView];
-    }
-    return _firstPasswdField;
-}
+//- (MyTextField *)firstPasswdField {
+//    if (_firstPasswdField == nil) {
+//        _firstPasswdField = [[MyTextField alloc] init];
+//        _firstPasswdField.placeholder = @"请设置密码";
+//        _firstPasswdField.rightViewMode = UITextFieldViewModeAlways;
+//        _firstPasswdField.rightView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"SigninTextfieldPassword"]];
+//        [_firstPasswdField rightViewGesture:_firstPasswdField.rightView];
+//    }
+//    return _firstPasswdField;
+//}
 
-- (MyTextField *)confirmPasswdField {
-    if (_confirmPasswdField == nil) {
-        _confirmPasswdField = [[MyTextField alloc] init];
-        _confirmPasswdField.placeholder = @"请确认密码";
-        _confirmPasswdField.rightViewMode = UITextFieldViewModeAlways;
-        _confirmPasswdField.rightView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"SigninTextfieldPassword"]];
-        [_confirmPasswdField rightViewGesture:_confirmPasswdField.rightView];
-        
-    }
-    return _confirmPasswdField;
-}
+//- (MyTextField *)confirmPasswdField {
+//    if (_confirmPasswdField == nil) {
+//        _confirmPasswdField = [[MyTextField alloc] init];
+//        _confirmPasswdField.placeholder = @"请确认密码";
+//        _confirmPasswdField.rightViewMode = UITextFieldViewModeAlways;
+//        _confirmPasswdField.rightView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"SigninTextfieldPassword"]];
+//        [_confirmPasswdField rightViewGesture:_confirmPasswdField.rightView];
+//        
+//    }
+//    return _confirmPasswdField;
+//}
 
 - (MyTextField *)verifyField {
     if (_verifyField == nil) {

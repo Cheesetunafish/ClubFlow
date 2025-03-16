@@ -36,8 +36,10 @@
     self.backgroundColor = [UIColor whiteColor];
     [self addSubview:self.titleImage];
     [self addSubview:self.subTitle];
+    [self addSubview:self.subTitle2];
+    [self addSubview:self.imageView];
     [self addSubview:self.emailField];
-    [self addSubview:self.passwordField];
+//    [self addSubview:self.passwordField];
     [self addSubview:self.loginButton];
     [self addSubview:self.signinButton];
     [self masMakePosition];
@@ -50,29 +52,43 @@
         make.centerX.equalTo(self);
         make.height.mas_equalTo(42);
         make.width.mas_equalTo(327);
-        make.top.equalTo(self.mas_top).mas_offset(160);
+        make.top.equalTo(self.mas_top).mas_offset(120);
     }];
     [self.subTitle mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self).mas_offset(20);
-        make.width.mas_equalTo(100);
+        make.width.mas_equalTo(200);
+        make.height.mas_equalTo(50);
+        make.top.equalTo(self.titleImage.mas_bottom).mas_offset(20);
+    }];
+    [self.subTitle2 mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.equalTo(self);
+        make.left.equalTo(self.subTitle);
+        make.width.mas_equalTo(200);
         make.height.mas_equalTo(40);
-        make.top.equalTo(self.titleImage.mas_bottom).mas_offset(60);
+        make.top.equalTo(self.subTitle.mas_bottom).mas_offset(10);
+    }];
+    [self.imageView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.equalTo(self);
+        make.right.equalTo(self).mas_offset(-100);
+        make.width.mas_equalTo(200);
+        make.height.mas_equalTo(200);
+        make.top.equalTo(self.subTitle2.mas_bottom).mas_offset(50);
     }];
     [self.emailField mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.subTitle);
         make.right.offset(-20);
         make.height.mas_equalTo(45);
-        make.top.equalTo(self.subTitle.mas_bottom).mas_offset(10);
+        make.top.equalTo(self.imageView.mas_bottom).mas_offset(20);
     }];
-    [self.passwordField mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self.emailField);
-        make.right.equalTo(self.emailField);
-        make.height.mas_equalTo(45);
-        make.top.equalTo(self.emailField.mas_bottom).mas_offset(20);
-    }];
+//    [self.passwordField mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.left.equalTo(self.emailField);
+//        make.right.equalTo(self.emailField);
+//        make.height.mas_equalTo(45);
+//        make.top.equalTo(self.emailField.mas_bottom).mas_offset(20);
+//    }];
     [self.loginButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(self);
-        make.top.equalTo(self.passwordField.mas_bottom).mas_offset(40);
+        make.top.equalTo(self.emailField.mas_bottom).mas_offset(40);
         make.width.mas_equalTo(60.02);
         make.height.mas_equalTo(44);
     }];
@@ -97,11 +113,27 @@
 - (UITextView *)subTitle {
     if (_subTitle == nil) {
         _subTitle = [[UITextView alloc] init];
-        _subTitle.text = @"从邮箱";
+        _subTitle.text = @"Think it.Make it.";
         _subTitle.textColor = [UIColor blackColor];
-        _subTitle.font = [UIFont systemFontOfSize:15];
+        _subTitle.font = [UIFont boldSystemFontOfSize:25];
     }
     return _subTitle;
+}
+- (UITextView *)subTitle2 {
+    if (_subTitle2 == nil) {
+        _subTitle2 = [[UITextView alloc] init];
+        _subTitle2.text = @"登入你的ClubFlow账号";
+        _subTitle2.textColor = [UIColor grayColor];
+        _subTitle2.font = [UIFont systemFontOfSize:20];
+    }
+    return _subTitle2;
+}
+
+- (UIImageView *)imageView {
+    if (_imageView == nil) {
+        _imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"LoginImage"]];
+    }
+    return _imageView;
 }
 
 - (MyTextField *)emailField {
@@ -114,19 +146,19 @@
     return _emailField;
 }
 
-- (MyTextField *)passwordField {
-    if (_passwordField == nil) {
-        _passwordField = [[MyTextField alloc] init];
-        _passwordField.placeholder = @"请输入密码...";
-        _passwordField.secureTextEntry = YES;
-        _passwordField.leftViewMode = UITextFieldViewModeAlways;
-        _passwordField.leftView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"LoginTextfieldPassword"]];
-        _passwordField.rightViewMode = UITextFieldViewModeAlways;
-        _passwordField.rightView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"LoginTextfieldPasswordRight"]];
-        [_passwordField rightViewGesture:_passwordField.rightView];
-    }
-    return _passwordField;
-}
+//- (MyTextField *)passwordField {
+//    if (_passwordField == nil) {
+//        _passwordField = [[MyTextField alloc] init];
+//        _passwordField.placeholder = @"请输入密码...";
+//        _passwordField.secureTextEntry = YES;
+//        _passwordField.leftViewMode = UITextFieldViewModeAlways;
+//        _passwordField.leftView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"LoginTextfieldPassword"]];
+//        _passwordField.rightViewMode = UITextFieldViewModeAlways;
+//        _passwordField.rightView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"LoginTextfieldPasswordRight"]];
+//        [_passwordField rightViewGesture:_passwordField.rightView];
+//    }
+//    return _passwordField;
+//}
 
 
 - (UIButton *)loginButton {

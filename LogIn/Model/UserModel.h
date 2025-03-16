@@ -15,6 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSString *email;
 /// password
 @property (nonatomic, strong) NSString *password;
+
 - (BOOL)isValidEmail;
 @end
 

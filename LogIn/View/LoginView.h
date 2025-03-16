@@ -13,12 +13,16 @@ NS_ASSUME_NONNULL_BEGIN
 @interface LoginView : UIView
 /// Title
 @property (nonatomic, strong) UIImageView *titleImage;
-/// emailTitle
+///  标语1
 @property (nonatomic, strong) UITextView *subTitle;
+/// 标语2
+@property (nonatomic, strong) UITextView *subTitle2;
+/// 图片
+@property (nonatomic, strong) UIImageView *imageView;
 /// 账号输入框
 @property (nonatomic, strong) MyTextField *emailField;
 /// 密码输入框
-@property (nonatomic, strong) MyTextField *passwordField;
+//@property (nonatomic, strong) MyTextField *passwordField;
 /// 登录按钮
 @property (nonatomic, strong) UIButton *loginButton;
 /// 注册按钮
