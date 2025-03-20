@@ -5,9 +5,11 @@
 //  Created by Shea Cheese on 2025/3/12.
 //
 
+#import <FirebaseAuth/FirebaseAuth.h>
 #import "SigninViewController.h"
 #import "SigninView.h"
 #import "AuthManager.h"
+#import "UserModel.h"
 
 @interface SigninViewController ()
 
@@ -33,7 +35,8 @@
 #pragma mark - count
 - (void)startCountdown {
     self.countdown = 60;
-    self.timer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(updateCountDown) userInfo:nil repeats:YES];// MARK: 👀
+    self.timer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(updateCountDown) userInfo:nil repeats:YES];
+    // TODO: 👀
 }
 
 - (void)updateCountDown {
@@ -61,7 +64,7 @@
 - (void)backToLoginPage {
     [self.navigationController popViewControllerAnimated:YES];
 }
-
+// 发送验证按钮
 - (void)sendCodeonTapped {
     NSString *email = self.signinView.emailField.text;
     
@@ -79,10 +82,12 @@
                 NSLog(@"发送失败:%@", errorMessage);
                 self.signinView.sendVerityButton.enabled = YES;
                 [self.timer invalidate];
-                self.signinView.sendVerityButton.titleLabel.text = @"重新发送";//MARK: 👀
+                self.signinView.sendVerityButton.titleLabel.text = @"重新发送";//TODO: 👀
             }
     }];
 }
+
+// 注册
 
 
 

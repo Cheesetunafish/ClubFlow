@@ -16,7 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// 账号输入框
 @property (nonatomic, strong) MyTextField *emailField;
 /// 设置密码框
-//@property (nonatomic, strong) MyTextField *firstPasswdField;
+@property (nonatomic, strong) MyTextField *firstPasswdField;
 /// 确认密码
 //@property (nonatomic, strong) MyTextField *confirmPasswdField;
 /// 验证码

@@ -39,7 +39,7 @@
     [self addSubview:self.subTitle2];
     [self addSubview:self.imageView];
     [self addSubview:self.emailField];
-//    [self addSubview:self.passwordField];
+    [self addSubview:self.passwordField];
     [self addSubview:self.loginButton];
     [self addSubview:self.signinButton];
     [self masMakePosition];
@@ -80,15 +80,15 @@
         make.height.mas_equalTo(45);
         make.top.equalTo(self.imageView.mas_bottom).mas_offset(20);
     }];
-//    [self.passwordField mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.left.equalTo(self.emailField);
-//        make.right.equalTo(self.emailField);
-//        make.height.mas_equalTo(45);
-//        make.top.equalTo(self.emailField.mas_bottom).mas_offset(20);
-//    }];
+    [self.passwordField mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.emailField);
+        make.right.equalTo(self.emailField);
+        make.height.mas_equalTo(45);
+        make.top.equalTo(self.emailField.mas_bottom).mas_offset(20);
+    }];
     [self.loginButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(self);
-        make.top.equalTo(self.emailField.mas_bottom).mas_offset(40);
+        make.top.equalTo(self.passwordField.mas_bottom).mas_offset(40);
         make.width.mas_equalTo(60.02);
         make.height.mas_equalTo(44);
     }];
@@ -146,19 +146,19 @@
     return _emailField;
 }
 
-//- (MyTextField *)passwordField {
-//    if (_passwordField == nil) {
-//        _passwordField = [[MyTextField alloc] init];
-//        _passwordField.placeholder = @"请输入密码...";
-//        _passwordField.secureTextEntry = YES;
-//        _passwordField.leftViewMode = UITextFieldViewModeAlways;
-//        _passwordField.leftView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"LoginTextfieldPassword"]];
-//        _passwordField.rightViewMode = UITextFieldViewModeAlways;
-//        _passwordField.rightView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"LoginTextfieldPasswordRight"]];
-//        [_passwordField rightViewGesture:_passwordField.rightView];
-//    }
-//    return _passwordField;
-//}
+- (MyTextField *)passwordField {
+    if (_passwordField == nil) {
+        _passwordField = [[MyTextField alloc] init];
+        _passwordField.placeholder = @"请输入密码...";
+        _passwordField.secureTextEntry = YES;
+        _passwordField.leftViewMode = UITextFieldViewModeAlways;
+        _passwordField.leftView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"LoginTextfieldPassword"]];
+        _passwordField.rightViewMode = UITextFieldViewModeAlways;
+        _passwordField.rightView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"LoginTextfieldPasswordRight"]];
+        [_passwordField rightViewGesture:_passwordField.rightView];
+    }
+    return _passwordField;
+}
 
 
 - (UIButton *)loginButton {
@@ -180,7 +180,6 @@
         [_signinButton setTitle:@"还没有账号？立即注册" forState:UIControlStateNormal];
         [_signinButton setTitleColor:[UIColor colorWithHexString:@"007AFF"] forState:UIControlStateNormal];
         _signinButton.titleLabel.font = [UIFont systemFontOfSize:15];
-//        [_signinButton addTarget:self action:@selector(jumpToSignPage) forControlEvents:UIControlEventTouchUpInside];
         _signinButton.titleLabel.textAlignment = NSTextAlignmentCenter;
     }
     return _signinButton;
