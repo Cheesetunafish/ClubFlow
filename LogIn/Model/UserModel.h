@@ -11,7 +11,8 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface UserModel : NSObject
-
+/// uid
+@property (nonatomic, copy) NSString *uid;
 /// email
 @property (nonatomic, copy) NSString *email;
 /// 用户名
@@ -25,8 +26,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype)initWithFirebaseUser:(FIRUser *)firebaseUser;
 /// 将UserModel对象转换成字典
 - (NSDictionary *)toDictionary;
-
-- (void)registerUserWithEmail:(NSString *)email password:(NSString *)password;
 
 @end
 

@@ -5,11 +5,11 @@
 //  Created by Shea Cheese on 2025/3/12.
 //
 
-#import <FirebaseAuth/FirebaseAuth.h>
 #import "SigninViewController.h"
 #import "SigninView.h"
 #import "AuthManager.h"
 #import "UserModel.h"
+#import "UserManager.h"
 
 @interface SigninViewController ()
 
@@ -56,6 +56,7 @@
         _signinView = [[SigninView alloc] initWithFrame:self.view.frame];
         [_signinView.loginButton addTarget:self action:@selector(backToLoginPage) forControlEvents:UIControlEventTouchUpInside];
         [_signinView.sendVerityButton addTarget:self action:@selector(sendCodeonTapped) forControlEvents:UIControlEventTouchUpInside];
+        [_signinView.signInButton addTarget:self action:@selector(signInOnTapped) forControlEvents:UIControlEventTouchUpInside];
     }
     return _signinView;
 }
@@ -86,8 +87,24 @@
             }
     }];
 }
+// 点击注册按钮
+- (void)signInOnTapped {
+    NSString *email = self.signinView.emailField.text;
+    NSString *password = self.signinView.firstPasswdField.text;
+    
+    [[UserManager sharedInstance] registerUserWithEmail:email password:password completion:^(UserModel * _Nonnull user, NSError * _Nonnull error) {
+            if (error) {
+                NSLog(@"注册失败：%@", error.localizedDescription);
+                return;
+            }
+            NSLog(@"注册成功，用户uid:%@", user.uid);
+    }];
+}
 
-// 注册
+- (void)proceedToSignInPage {
+    // 转到登录页面
+    [self.navigationController popViewControllerAnimated:YES];
+}
 
 
 

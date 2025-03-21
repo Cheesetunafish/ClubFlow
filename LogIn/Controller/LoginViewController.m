@@ -99,7 +99,9 @@
     NSString *password = self.loginView.passwordField.text;
     // 1.验证邮箱是否正确
     BOOL isValid = [self isValidEmail:email];
-    if (email.length || password.length == 0) {
+    if (email.length == 0 || password.length == 0) {
+        // 错误提示
+        [self showErrorHint:@"请输入完整的邮箱和密码"];
         NSLog(@"请输入完整的邮箱和密码");
         return;
     }
@@ -107,6 +109,8 @@
         // 2.Firebase验证用户账号密码
         [[FIRAuth auth] signInWithEmail:email password:password completion:^(FIRAuthDataResult * _Nullable authResult, NSError * _Nullable error) {
             if (error) {
+                // 错误提示
+                [self showErrorHint:@"登录失败"];
                 NSLog(@"登录失败:%@", error.localizedDescription);// 错误提示
                 return;
             }
@@ -120,6 +124,7 @@
         }];
   
     } else {
+        [self showErrorHint:@"邮箱格式错误"];
         NSLog(@"邮箱格式错误");
         return;
     }
@@ -134,10 +139,20 @@
 // 登录成功进入主页
 - (void)proceedToMainScreenWithUser:(UserModel *)user {
     NSLog(@"用户数据：%@", [user toDictionary]);
-    CommentViewController *commentViewController = [[CommentViewController alloc] init];
-    [self.navigationController pushViewController:commentViewController animated:YES];
+    CommentViewController *homeVC = [[CommentViewController alloc] init];
+    UINavigationController *homeNav = [[UINavigationController alloc] initWithRootViewController:homeVC];
+    
+    homeNav.modalPresentationStyle = UIModalPresentationFullScreen;// 全屏模式
+    [self presentViewController:homeNav animated:YES completion:nil];// 模块弹出首页
 }
-
+// 展示错误提示
+- (void)showErrorHint:(NSString *)errorText {
+    if (self.loginView.errorText.hidden == YES) {
+        self.loginView.errorText.hidden = NO;
+    }
+    self.loginView.errorText.text = errorText;
+    return;
+}
 /*
 #pragma mark - Navigation
 

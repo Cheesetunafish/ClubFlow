@@ -23,6 +23,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) MyTextField *emailField;
 /// 密码输入框
 @property (nonatomic, strong) MyTextField *passwordField;
+/// 错误提示
+@property (nonatomic, strong) UITextView *errorText;
 /// 登录按钮
 @property (nonatomic, strong) UIButton *loginButton;
 /// 注册按钮

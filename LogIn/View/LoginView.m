@@ -42,6 +42,7 @@
     [self addSubview:self.passwordField];
     [self addSubview:self.loginButton];
     [self addSubview:self.signinButton];
+    [self addSubview:self.errorText];
     [self masMakePosition];
 }
 
@@ -86,9 +87,15 @@
         make.height.mas_equalTo(45);
         make.top.equalTo(self.emailField.mas_bottom).mas_offset(20);
     }];
+    [self.errorText mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.equalTo(self);
+        make.top.equalTo(self.passwordField.mas_bottom).mas_offset(5);
+        make.width.mas_equalTo(327);
+        make.bottom.equalTo(self.loginButton.mas_top).mas_offset(-5);
+    }];
     [self.loginButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(self);
-        make.top.equalTo(self.passwordField.mas_bottom).mas_offset(40);
+        make.top.equalTo(self.passwordField.mas_bottom).mas_offset(50);
         make.width.mas_equalTo(60.02);
         make.height.mas_equalTo(44);
     }];
@@ -160,6 +167,17 @@
     return _passwordField;
 }
 
+- (UITextView *)errorText {
+    if (_errorText == nil) {
+        _errorText = [[UITextView alloc] init];
+        _errorText.textColor = [UIColor redColor];
+        _errorText.font = [UIFont systemFontOfSize:15];
+        _errorText.textAlignment = NSTextAlignmentCenter;
+        // _errorText.text = @"测试一下错误位置";
+        _errorText.hidden = YES;
+    }
+    return _errorText;
+}
 
 - (UIButton *)loginButton {
     if (_loginButton == nil) {
