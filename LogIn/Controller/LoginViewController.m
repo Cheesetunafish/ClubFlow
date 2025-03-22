@@ -5,6 +5,7 @@
 //  Created by Shea Cheese on 2025/3/10.
 //
 
+#import "AppDelegate.h"
 #import "LoginViewController.h"
 #import "SigninViewController.h"
 #import "CommentViewController.h"
@@ -139,11 +140,12 @@
 // 登录成功进入主页
 - (void)proceedToMainScreenWithUser:(UserModel *)user {
     NSLog(@"用户数据：%@", [user toDictionary]);
-    CommentViewController *homeVC = [[CommentViewController alloc] init];
-    UINavigationController *homeNav = [[UINavigationController alloc] initWithRootViewController:homeVC];
     
-    homeNav.modalPresentationStyle = UIModalPresentationFullScreen;// 全屏模式
-    [self presentViewController:homeNav animated:YES completion:nil];// 模块弹出首页
+    // 获取 AppDelegate 实例
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    UITabBarController *tabBarController = [appDelegate createTabBarController];
+    tabBarController.modalPresentationStyle = UIModalPresentationFullScreen;// 全屏模式
+    [self presentViewController:tabBarController animated:YES completion:nil];// 模块弹出首页
 }
 // 展示错误提示
 - (void)showErrorHint:(NSString *)errorText {

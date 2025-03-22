@@ -6,13 +6,22 @@
 //
 
 #import "CommentViewController.h"
+#import "SettingViewController.h"
 #import "CommentModel.h"
 #import "CommentCell.h"
+#import "TopView.h"
+#import "Masonry.h"
+#import "Macros.h"
+@import FirebaseAuth;
 
 @interface CommentViewController ()<UITableViewDelegate, UITableViewDataSource>
 
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) NSMutableArray<CommentModel *> *comments;
+/// topview
+@property (nonatomic, strong) TopView *topView;
+/// user
+@property (nonatomic, strong) UserModel *user;
 
 
 @end
@@ -21,40 +30,47 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
-    self.title = @"留言板";
+    self.user = [[UserModel alloc] initWithFirebaseUser:[FIRAuth auth].currentUser];
     self.view.backgroundColor = [UIColor whiteColor];
+    [self.view addSubview:self.topView];// 顶部栏
+    [self masMakePosition];
 
-    self.tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
-    [self.tableView registerClass:[CommentCell class] forCellReuseIdentifier:@"CommentCell"];
-    [self.view addSubview:self.tableView];
-
-    [self loadComments];
 }
 
-- (void)loadComments {
-    CommentModel *comment1 = [[CommentModel alloc] initWithAuthor:@"陈美玲" content:@"今天的阳光真好，希望大家有美好的一天！" time:@"10分钟前" likes:23 replies:@[]];
-    
-    CommentModel *reply = [[CommentModel alloc] initWithAuthor:@"王小明" content:@"恭喜完成项目！期待下次合作。" time:@"20分钟前" likes:0 replies:@[]];
-
-    CommentModel *comment2 = [[CommentModel alloc] initWithAuthor:@"张志远" content:@"刚刚完成了一个重要项目，团队合作真的很愉快。" time:@"30分钟前" likes:45 replies:@[reply]];
-
-    self.comments = [NSMutableArray arrayWithArray:@[comment1, comment2]];
-    [self.tableView reloadData];
+- (void)masMakePosition {
+    [self.topView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.view).mas_offset(STATUSBAR_HEIGHT + 15);
+        make.centerX.equalTo(self.view);
+        make.width.equalTo(self.view);
+        make.height.mas_equalTo(73);
+    }];
 }
+
 
 #pragma mark - UITableViewDataSource
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.comments.count;
+
+
+#pragma mark - Lazy Load
+- (TopView *)topView {
+    if (!_topView) {
+        _topView = [[TopView alloc] initWithUser:self.user];
+        _topView.profileImage.userInteractionEnabled = YES;
+        UITapGestureRecognizer *tapProfile = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tappedProfile)];
+        [_topView.profileImage addGestureRecognizer:tapProfile];
+        NSLog(@"😍self.user:%@", [self.user toDictionary]);
+    }
+    return _topView;
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    CommentCell *cell = [tableView dequeueReusableCellWithIdentifier:@"CommentCell" forIndexPath:indexPath];
-    [cell configureWithComment:self.comments[indexPath.row]];
-    return cell;
+
+#pragma mark - Action
+// 点击头像，进入设置页
+- (void)tappedProfile {
+    NSLog(@"😄按下头像");
+    SettingViewController *settingVC = [[SettingViewController alloc] init];
+    settingVC.modalPresentationStyle = UIModalPresentationPageSheet;
+    [self presentViewController:settingVC animated:YES completion:nil];
 }
 /*
 #pragma mark - Navigation
