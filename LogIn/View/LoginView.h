@@ -14,9 +14,9 @@ NS_ASSUME_NONNULL_BEGIN
 /// Title
 @property (nonatomic, strong) UIImageView *titleImage;
 ///  标语1
-@property (nonatomic, strong) UITextView *subTitle;
+@property (nonatomic, strong) UILabel *subTitle;
 /// 标语2
-@property (nonatomic, strong) UITextView *subTitle2;
+@property (nonatomic, strong) UILabel *subTitle2;
 /// 图片
 @property (nonatomic, strong) UIImageView *imageView;
 /// 账号输入框
@@ -24,7 +24,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// 密码输入框
 @property (nonatomic, strong) MyTextField *passwordField;
 /// 错误提示
-@property (nonatomic, strong) UITextView *errorText;
+@property (nonatomic, strong) UILabel *errorText;
 /// 登录按钮
 @property (nonatomic, strong) UIButton *loginButton;
 /// 注册按钮

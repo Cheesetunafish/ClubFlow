@@ -6,9 +6,10 @@
 //
 
 #import "EditViewController.h"
-
+#import "EditView.h"
 @interface EditViewController ()
-
+/// editView
+@property (nonatomic, strong) EditView *editView;
 @end
 
 @implementation EditViewController
@@ -16,7 +17,14 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
-    // Do any additional setup after loading the view.
+    [self.view addSubview:self.editView];
+}
+
+- (EditView *)editView {
+    if (!_editView) {
+        _editView = [[EditView alloc] init];
+    }
+    return _editView;
 }
 
 /*

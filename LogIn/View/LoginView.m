@@ -117,18 +117,18 @@
     return _titleImage;
 }
 
-- (UITextView *)subTitle {
+- (UILabel *)subTitle {
     if (_subTitle == nil) {
-        _subTitle = [[UITextView alloc] init];
+        _subTitle = [[UILabel alloc] init];
         _subTitle.text = @"Think it.Make it.";
         _subTitle.textColor = [UIColor blackColor];
         _subTitle.font = [UIFont boldSystemFontOfSize:25];
     }
     return _subTitle;
 }
-- (UITextView *)subTitle2 {
+- (UILabel *)subTitle2 {
     if (_subTitle2 == nil) {
-        _subTitle2 = [[UITextView alloc] init];
+        _subTitle2 = [[UILabel alloc] init];
         _subTitle2.text = @"登入你的ClubFlow账号";
         _subTitle2.textColor = [UIColor grayColor];
         _subTitle2.font = [UIFont systemFontOfSize:20];
@@ -167,9 +167,9 @@
     return _passwordField;
 }
 
-- (UITextView *)errorText {
+- (UILabel *)errorText {
     if (_errorText == nil) {
-        _errorText = [[UITextView alloc] init];
+        _errorText = [[UILabel alloc] init];
         _errorText.textColor = [UIColor redColor];
         _errorText.font = [UIFont systemFontOfSize:15];
         _errorText.textAlignment = NSTextAlignmentCenter;

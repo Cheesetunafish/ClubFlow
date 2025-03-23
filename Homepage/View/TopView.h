@@ -13,9 +13,9 @@ NS_ASSUME_NONNULL_BEGIN
 ///  头像
 @property (nonatomic, strong) UIImageView *profileImage;
 /// 用户名
-@property (nonatomic, strong) UITextView *userName;
+@property (nonatomic, strong) UILabel *userName;
 /// email
-@property (nonatomic, strong) UITextView *userEmail;
+@property (nonatomic, strong) UILabel *userEmail;
 
 - (instancetype)initWithUser:(UserModel *)user;
 @end

@@ -59,18 +59,18 @@
     return _profileImage;
 }
 
-- (UITextView *)userName {
+- (UILabel *)userName {
     if (!_userName) {
-        _userName = [[UITextView alloc] init];
+        _userName = [[UILabel alloc] init];
         _userName.textColor = [UIColor blackColor];
         _userName.font = [UIFont systemFontOfSize:20];
     }
     return _userName;
 }
 
-- (UITextView *)userEmail {
+- (UILabel *)userEmail {
     if (!_userEmail) {
-        _userEmail = [[UITextView alloc] init];
+        _userEmail = [[UILabel alloc] init];
         _userEmail.textColor = [UIColor colorWithHexString:@"6B7280"];
         _userEmail.font = [UIFont systemFontOfSize:15];
     }
