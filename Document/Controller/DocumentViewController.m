@@ -124,9 +124,9 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     if (self.pinnedDocuments.count > 0) {
-        return section == 0 ? @"置顶" : @"昨天";
+        return section == 0 ? @"置顶" : @"";
     } else {
-        return @"昨天";
+        return @"";
     }
 }
 
