@@ -53,11 +53,12 @@
     
     // 将EditViewController包装在UINavigationController中
     UINavigationController *editNav = [[UINavigationController alloc] initWithRootViewController:editVC];
+    UINavigationController *docNav = [[UINavigationController alloc] initWithRootViewController:documentVC];
     
     homeVC.tabBarItem.title = @"留言板";
     contactVC.tabBarItem.title = @"通讯录";
     editNav.tabBarItem.title = @"编辑";
-    documentVC.tabBarItem.title = @"文档";
+    docNav.tabBarItem.title = @"我的文档";
     
     homeVC.tabBarItem.image = [UIImage imageNamed:@"HomeBar"];
     homeVC.tabBarItem.selectedImage = [[UIImage imageNamed:@"HomeBar"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
@@ -71,11 +72,11 @@
     editNav.tabBarItem.selectedImage = [[UIImage imageNamed:@"EditBar"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     [editNav.tabBarItem setTitleTextAttributes:@{NSForegroundColorAttributeName: [UIColor blackColor]} forState:UIControlStateSelected];
     
-    documentVC.tabBarItem.image = [UIImage imageNamed:@"DocumentBar"];
-    documentVC.tabBarItem.selectedImage = [[UIImage imageNamed:@"DocumentBar"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-    [documentVC.tabBarItem setTitleTextAttributes:@{NSForegroundColorAttributeName: [UIColor blackColor]} forState:UIControlStateSelected];
+    docNav.tabBarItem.image = [UIImage imageNamed:@"DocumentBar"];
+    docNav.tabBarItem.selectedImage = [[UIImage imageNamed:@"DocumentBar"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    [docNav.tabBarItem setTitleTextAttributes:@{NSForegroundColorAttributeName: [UIColor blackColor]} forState:UIControlStateSelected];
     
-    tabbarController.viewControllers = @[homeVC, contactVC, editNav, documentVC];
+    tabbarController.viewControllers = @[homeVC, contactVC, editNav, docNav];
     
     return tabbarController;
 }

@@ -25,7 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype)initWithTitle:(nullable NSString *)title 
                     content:(nullable NSString *)content 
                 documentId:(nullable NSString *)documentId;
-
+- (void)setNewDocumentMode;
 @end
 
 NS_ASSUME_NONNULL_END

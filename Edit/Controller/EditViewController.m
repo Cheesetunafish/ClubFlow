@@ -300,7 +300,7 @@
     NSString *documentContent = content[@"content"];
     
     if (title.length == 0 && documentContent.length == 0) {
-        [self dismissViewControllerAnimated:YES completion:nil];
+        // 如果标题和内容都为空，直接返回
         return;
     }
     
@@ -334,7 +334,14 @@
                 [alert addAction:[UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:nil]];
                 [self presentViewController:alert animated:YES completion:nil];
             } else {
-                [self dismissViewControllerAnimated:YES completion:nil];
+                // 保存成功后，切换到文档列表
+                UITabBarController *tabBarController = (UITabBarController *)self.tabBarController;
+                [tabBarController setSelectedIndex:3]; // 切换到第四个标签页（Document）
+                
+                // 如果是编辑模式，需要dismiss当前视图控制器
+                if (self.documentId) {
+                    [self dismissViewControllerAnimated:YES completion:nil];
+                }
             }
         });
     };
@@ -346,6 +353,20 @@
 
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void)setNewDocumentMode {
+    self.documentId = nil;
+    self.editView.titleTextView.text = @"";
+    self.editView.contentTextView.text = @"";
+    self.navigationItem.title = @"新建文档";
+    
+    // 设置placeholder
+    self.editView.titlePlaceholderLabel.hidden = NO;
+    self.editView.contentPlaceholderLabel.hidden = NO;
+    
+    // 让标题输入框获得焦点
+    [self.editView.titleTextView becomeFirstResponder];
 }
 
 @end

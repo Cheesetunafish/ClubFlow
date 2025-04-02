@@ -27,6 +27,7 @@
     [super viewDidLoad];
     self.title = @"我的文档";
     [self setupViews];
+    [self setupNavigationBar];
     [self setupFirebase];
     [self loadDocuments];
 }
@@ -40,6 +41,14 @@
     [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.edges.equalTo(self.view);
     }];
+}
+
+- (void)setupNavigationBar {
+    // 添加新建文档按钮
+    UIBarButtonItem *createButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd
+                                                                                target:self
+                                                                                action:@selector(createDocument)];
+    self.navigationItem.rightBarButtonItem = createButton;
 }
 
 - (void)setupFirebase {
@@ -204,6 +213,18 @@
 - (void)togglePinDocument:(DocumentModel *)document {
     document.isPinned = !document.isPinned;
     [[self.databaseRef child:[NSString stringWithFormat:@"documents/%@", document.documentId]] updateChildValues:@{@"isPinned": @(document.isPinned)}];
+}
+
+// 添加创建文档方法
+- (void)createDocument {
+    // 切换到Edit标签页
+    UITabBarController *tabBarController = (UITabBarController *)self.tabBarController;
+    [tabBarController setSelectedIndex:2]; // 切换到第三个标签页（Edit）
+    
+    // 获取EditVC并设置为新建模式
+    UINavigationController *editNav = tabBarController.viewControllers[2];
+    EditViewController *editVC = (EditViewController *)editNav.topViewController;
+    [editVC setNewDocumentMode];
 }
 
 @end
