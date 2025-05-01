@@ -13,5 +13,6 @@
 
 - (UITabBarController *)createTabBarController;
 
+- (void)processFriendshipWithInviter:(NSString *)inviterUID;
 @end
 

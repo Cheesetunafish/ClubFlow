@@ -146,6 +146,12 @@
     UITabBarController *tabBarController = [appDelegate createTabBarController];
     tabBarController.modalPresentationStyle = UIModalPresentationFullScreen;// 全屏模式
     [self presentViewController:tabBarController animated:YES completion:nil];// 模块弹出首页
+    
+    // 检查是否有待处理的好友邀请
+    NSString *pendingInviterUID = [[NSUserDefaults standardUserDefaults] objectForKey:@"pendingInviterUID"];
+    if (pendingInviterUID) {
+        [appDelegate processFriendshipWithInviter:pendingInviterUID];
+    }
 }
 // 展示错误提示
 - (void)showErrorHint:(NSString *)errorText {
@@ -155,6 +161,18 @@
     self.loginView.errorText.text = errorText;
     return;
 }
+
+- (void)loginSuccess {
+    // 检查是否有待处理的好友邀请
+    NSString *pendingInviterUID = [[NSUserDefaults standardUserDefaults] objectForKey:@"pendingInviterUID"];
+    if (pendingInviterUID) {
+        AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+        [appDelegate processFriendshipWithInviter:pendingInviterUID];
+    }
+    
+    // 其他登录成功后的处理...
+}
+
 /*
 #pragma mark - Navigation
 

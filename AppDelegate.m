@@ -25,6 +25,9 @@
     // Firebase认证
     [FIRApp configure];
     
+    // 设置动态链接处理
+    [self setupDynamicLinks];
+    
     // 登录状态判断rootVC
         // 获取当前登录用户
     FIRUser *currentUser = [FIRAuth auth].currentUser;
@@ -42,6 +45,123 @@
     [self.window makeKeyAndVisible];
     
     return YES;
+}
+
+- (void)setupDynamicLinks {
+    // 处理应用启动时的动态链接
+    FIRDynamicLink *dynamicLink = [[FIRDynamicLinks dynamicLinks] dynamicLinkFromCustomSchemeURL:[NSURL URLWithString:@"com.clubflow.app"]];
+    if (dynamicLink) {
+        [self handleDynamicLink:dynamicLink];
+    }
+}
+
+- (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray<id<UIUserActivityRestoring>> * _Nullable))restorationHandler {
+    // 处理通用链接
+    return [[FIRDynamicLinks dynamicLinks] handleUniversalLink:userActivity.webpageURL
+                                                    completion:^(FIRDynamicLink * _Nullable dynamicLink, NSError * _Nullable error) {
+        if (dynamicLink) {
+            [self handleDynamicLink:dynamicLink];
+        }
+    }];
+}
+
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
+    // 处理自定义URL scheme
+    if ([url.scheme isEqualToString:@"myapp"]) {
+        if ([url.host isEqualToString:@"invite"]) {
+            // 解析URL参数
+            NSURLComponents *components = [NSURLComponents componentsWithURL:url resolvingAgainstBaseURL:NO];
+            NSArray *queryItems = components.queryItems;
+            
+            NSString *inviterUID = nil;
+            for (NSURLQueryItem *item in queryItems) {
+                if ([item.name isEqualToString:@"inviter"]) {
+                    inviterUID = item.value;
+                    break;
+                }
+            }
+            
+            if (inviterUID) {
+                // 保存邀请者UID到UserDefaults，等待用户登录后处理
+                [[NSUserDefaults standardUserDefaults] setObject:inviterUID forKey:@"pendingInviterUID"];
+                [[NSUserDefaults standardUserDefaults] synchronize];
+                
+                // 如果用户已登录，直接处理好友关系
+                if ([FIRAuth auth].currentUser) {
+                    [self processFriendshipWithInviter:inviterUID];
+                }
+            }
+        }
+        return YES;
+    }
+    return NO;
+}
+
+- (void)handleDynamicLink:(FIRDynamicLink *)dynamicLink {
+    NSURL *url = dynamicLink.url;
+    if (!url) return;
+    
+    // 解析URL参数
+    NSURLComponents *components = [NSURLComponents componentsWithURL:url resolvingAgainstBaseURL:NO];
+    NSArray *queryItems = components.queryItems;
+    
+    NSString *inviterUID = nil;
+    for (NSURLQueryItem *item in queryItems) {
+        if ([item.name isEqualToString:@"inviter"]) {
+            inviterUID = item.value;
+            break;
+        }
+    }
+    
+    if (inviterUID) {
+        // 保存邀请者UID到UserDefaults，等待用户登录后处理
+        [[NSUserDefaults standardUserDefaults] setObject:inviterUID forKey:@"pendingInviterUID"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        
+        // 如果用户已登录，直接处理好友关系
+        if ([FIRAuth auth].currentUser) {
+            [self processFriendshipWithInviter:inviterUID];
+        }
+    }
+}
+
+- (void)processFriendshipWithInviter:(NSString *)inviterUID {
+    FIRUser *currentUser = [FIRAuth auth].currentUser;
+    if (!currentUser) return;
+    
+    // 确保uidA < uidB，以保持一致性
+    NSString *uidA = [currentUser.uid compare:inviterUID] == NSOrderedAscending ? currentUser.uid : inviterUID;
+    NSString *uidB = [currentUser.uid compare:inviterUID] == NSOrderedAscending ? inviterUID : currentUser.uid;
+    
+    // 创建好友关系记录
+    NSString *friendshipID = [NSString stringWithFormat:@"%@_%@", uidA, uidB];
+    NSDictionary *friendshipData = @{
+        @"user1": uidA,
+        @"user2": uidB,
+        @"createdAt": [FIRServerValue timestamp]
+    };
+    
+    // 保存到Firestore
+    FIRFirestore *db = [FIRFirestore firestore];
+    [[[db collectionWithPath:@"friendships"] documentWithPath:friendshipID] setData:friendshipData
+                                                                        completion:^(NSError * _Nullable error) {
+        if (error) {
+            NSLog(@"Error adding friendship: %@", error);
+        } else {
+            // 清除待处理的邀请者UID
+            [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"pendingInviterUID"];
+            [[NSUserDefaults standardUserDefaults] synchronize];
+            
+            // 显示成功提示
+            dispatch_async(dispatch_get_main_queue(), ^{
+                UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"添加好友成功"
+                                                                             message:@"您已成功添加好友"
+                                                                      preferredStyle:UIAlertControllerStyleAlert];
+                [alert addAction:[UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:nil]];
+                [self.window.rootViewController presentViewController:alert animated:YES completion:nil];
+            });
+        }
+    }];
 }
 
 - (UITabBarController *)createTabBarController {

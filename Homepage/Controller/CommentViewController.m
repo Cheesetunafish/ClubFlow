@@ -31,10 +31,15 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.user = [[UserModel alloc] initWithFirebaseUser:[FIRAuth auth].currentUser];
-    self.view.backgroundColor = [UIColor whiteColor];
-    [self.view addSubview:self.topView];// 顶部栏
-    [self masMakePosition];
+    [self setupUI];
+}
 
+-(void) setupUI {
+    self.title = @"留言板";
+    self.view.backgroundColor = [UIColor whiteColor];
+    // 顶部栏
+    [self.view addSubview:self.topView];
+    [self masMakePosition];
 }
 
 - (void)masMakePosition {
