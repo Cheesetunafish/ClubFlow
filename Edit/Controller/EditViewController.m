@@ -8,7 +8,9 @@
 #import "EditViewController.h"
 #import "EditView.h"
 #import "Masonry.h"
+#import "DocumentModel.h"
 @import FirebaseDatabase;
+@import FirebaseAuth;
 
 @interface EditViewController () <EditViewDelegate, UITextViewDelegate>
 
@@ -17,6 +19,7 @@
 @property (nonatomic, copy) NSString *initialTitle;
 @property (nonatomic, copy) NSString *initialContent;
 @property (nonatomic, strong) FIRDatabaseReference *databaseRef;
+//@property (nonatomic, strong) UIButton *addDocButton;
 
 @end
 
@@ -298,28 +301,28 @@
     NSDictionary *content = [self.editView getCurrentContent];
     NSString *title = content[@"title"];
     NSString *documentContent = content[@"content"];
-    
     if (title.length == 0 && documentContent.length == 0) {
-        // 如果标题和内容都为空，直接返回
+        [self dismissViewControllerAnimated:YES completion:nil];
         return;
     }
-    
-    NSDictionary *documentData = @{
-        @"title": title ?: @"",
-        @"content": documentContent ?: @"",
-        @"createTime": @([[NSDate date] timeIntervalSince1970]),
-        @"isPinned": @(NO)
-    };
-    
-    FIRDatabaseReference *docRef;
+    // 创建DocumentModel对象
+    DocumentModel *document = [[DocumentModel alloc] init];
+    document.title = title;
+    document.content = documentContent;
+    document.createTime = [[NSDate date] timeIntervalSince1970];
+    document.isPinned = NO;
+    // 编辑模式
     if (self.documentId) {
-        // 更新现有文档
-        docRef = [[self.databaseRef child:@"documents"] child:self.documentId];
+        document.documentId = self.documentId;
+        NSDictionary *documentData = [document toDictionary];
+        FIRDatabaseReference *docRef = [[self.databaseRef child:@"documents"] child:self.documentId];
         [docRef updateChildValues:documentData withCompletionBlock:[self saveCompletionBlock]];
     } else {
-        // 创建新文档
-        docRef = [[self.databaseRef child:@"documents"] childByAutoId];
-        [docRef setValue:documentData withCompletionBlock:[self saveCompletionBlock]];
+        // 新建模式
+        FIRDatabaseReference *newDocRef = [[self.databaseRef child:@"documents"] childByAutoId];
+        document.documentId = newDocRef.key;
+        NSDictionary *documentData = [document toDictionary];
+        [newDocRef setValue:documentData withCompletionBlock:[self saveCompletionBlock]];
     }
 }
 
@@ -334,14 +337,11 @@
                 [alert addAction:[UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:nil]];
                 [self presentViewController:alert animated:YES completion:nil];
             } else {
-                // 保存成功后，切换到文档列表
-                UITabBarController *tabBarController = (UITabBarController *)self.tabBarController;
-                [tabBarController setSelectedIndex:3]; // 切换到第四个标签页（Document）
-                
-                // 如果是编辑模式，需要dismiss当前视图控制器
-                if (self.documentId) {
-                    [self dismissViewControllerAnimated:YES completion:nil];
-                }
+                // 发送通知
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"DocumentDidUpdateNotification" 
+                                                                object:nil];
+                // 关闭编辑界面
+                [self dismissViewControllerAnimated:YES completion:nil];
             }
         });
     };

@@ -9,14 +9,17 @@
 
 @implementation DocumentModel
 
-+ (instancetype)documentWithDictionary:(NSDictionary *)dict {
-    DocumentModel *model = [[DocumentModel alloc] init];
-    model.documentId = dict[@"documentId"];
-    model.title = dict[@"title"];
-    model.content = dict[@"content"];
-    model.createTime = [dict[@"createTime"] doubleValue];
-    model.isPinned = [dict[@"isPinned"] boolValue];
-    return model;
+- (instancetype)initWithDictionary:(NSDictionary *)dictionary {
+    self = [super init];
+    if (self) {
+        self.documentId = dictionary[@"documentId"];
+        self.title = dictionary[@"title"];
+        self.content = dictionary[@"content"];
+        self.createTime = [dictionary[@"createTime"] doubleValue];
+        self.isPinned = [dictionary[@"isPinned"] boolValue];
+        self.userId = dictionary[@"userId"];
+    }
+    return self;
 }
 
 - (NSDictionary *)toDictionary {
@@ -25,7 +28,8 @@
         @"title": self.title ?: @"",
         @"content": self.content ?: @"",
         @"createTime": @(self.createTime),
-        @"isPinned": @(self.isPinned)
+        @"isPinned": @(self.isPinned),
+        @"userId": self.userId ?: @""
     };
 }
 

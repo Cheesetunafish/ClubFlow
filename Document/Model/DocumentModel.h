@@ -16,9 +16,10 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy) NSString *content;
 @property (nonatomic, assign) NSTimeInterval createTime;
 @property (nonatomic, assign) BOOL isPinned;
+@property (nonatomic, copy) NSString *userId;
 
 // 使用Firebase数据创建模型
-+ (instancetype)documentWithDictionary:(NSDictionary *)dict;
+- (instancetype)initWithDictionary:(NSDictionary *)dictionary;
 // 转换为Firebase数据
 - (NSDictionary *)toDictionary;
 
