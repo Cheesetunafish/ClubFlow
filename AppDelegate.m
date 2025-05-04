@@ -196,7 +196,7 @@
     docNav.tabBarItem.selectedImage = [[UIImage imageNamed:@"DocumentBar"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     [docNav.tabBarItem setTitleTextAttributes:@{NSForegroundColorAttributeName: [UIColor blackColor]} forState:UIControlStateSelected];
     
-    tabbarController.viewControllers = @[homeVC, contactVC, editNav, docNav];
+    tabbarController.viewControllers = @[homeVC, contactVC, docNav];
     
     return tabbarController;
 }

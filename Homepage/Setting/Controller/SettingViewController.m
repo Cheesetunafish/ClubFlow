@@ -6,6 +6,7 @@
 //
 
 #import "SettingViewController.h"
+#import "SelfpageViewController.h"
 #import "SettingView.h"
 #import "USerInfoCell.h"
 #import "OptionCell.h"
@@ -67,7 +68,7 @@ typedef NS_ENUM(NSInteger, SectionType) {
     switch (indexPath.section) {
         case SectionTypeUserInfo: {
             UserInfoCell *cell = [tableView dequeueReusableCellWithIdentifier:@"UserInfoCell" forIndexPath:indexPath];
-            [cell configureWithName:self.user.uid email:self.user.email avatar:self.user.photoUrl];
+            [cell configureWithName:self.user.displayName ?: @"userName" email:self.user.email avatar:self.user.photoUrl];
             return cell;
         }
         case SectionTypeOptions: {
@@ -99,15 +100,16 @@ typedef NS_ENUM(NSInteger, SectionType) {
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     switch (indexPath.section) {
         case SectionTypeUserInfo:
+            [self selectUserInfo];
             NSLog(@"点击用户");
             break;
         case SectionTypeOptions:
-            // TODO: 各option动作
+            [self selectTypeOptions];
             NSLog(@"点击optioncell：%@", self.options[indexPath.row][@"title"]);
             break;
         case SectionTypeLogout:
+            [self selectTypeLogout];
             NSLog(@"点击logout");
-            // TODO: 退出登录
             break;
         default:
             break;
@@ -123,8 +125,20 @@ typedef NS_ENUM(NSInteger, SectionType) {
     return 10; // 组尾间距
 }
 
+#pragma mark - TODO: 点击Cell方法
+// jump to selfie page
+- (void)selectUserInfo {
+    SelfpageViewController *selfpageVC = [[SelfpageViewController alloc] init];
+    [self presentViewController:selfpageVC animated:YES completion:nil];
+}
+- (void)selectTypeOptions {
+    
+}
+- (void)selectTypeLogout {
+    
+}
 
-#pragma mark - LazyLoad
+#pragma mark - Lazy Load
 - (SettingView *)settingView {
     if (!_settingView) {
         _settingView = [[SettingView alloc] init];
