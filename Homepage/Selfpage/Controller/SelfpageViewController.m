@@ -232,7 +232,7 @@
 #pragma mark - LazyLoad
 - (UIImageView *)avatarImageView {
     if (!_avatarImageView) {
-        self.avatarImageView = [[UIImageView alloc] init];
+        self.avatarImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"default_avatar"]];
         self.avatarImageView.layer.cornerRadius = 45;
         self.avatarImageView.clipsToBounds = YES;
         self.avatarImageView.userInteractionEnabled = YES;

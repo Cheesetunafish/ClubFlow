@@ -52,7 +52,7 @@
 
 - (UIImageView *)profileImage {
     if (!_profileImage) {
-        _profileImage = [[UIImageView alloc] init];
+        _profileImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"default_avatar"]];
         _profileImage.layer.cornerRadius = 20;
         _profileImage.backgroundColor = [UIColor lightGrayColor];
     }
