@@ -148,7 +148,7 @@
     if (self.pinnedDocuments.count > 0) {
         return section == 0 ? @"置顶文档" : @"最近文档";
     }
-    return @"";
+    return @"最近文档";
 }
 // section number
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -158,7 +158,11 @@
         return self.recentDocuments.count;
     }
 }
-
+// cell height
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return 50;
+}
+#pragma mark - UITableViewDelegate
 // tableviewcell is pinned or not
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     DocumentCell *cell = [tableView dequeueReusableCellWithIdentifier:[DocumentCell identifier]];
