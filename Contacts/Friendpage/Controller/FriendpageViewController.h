@@ -9,7 +9,13 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface FriendpageViewController : UIViewController
+
+@interface FriendPageViewController : UIViewController
+
+@property (nonatomic, copy) NSString *displayName;
+@property (nonatomic, copy) NSString *email;
+@property (nonatomic, copy) NSString *remarkName; // 备注名称
+@property (nonatomic, copy) NSString *avatarUrl;  // 头像URL
 
 @end
 

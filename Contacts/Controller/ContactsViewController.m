@@ -6,6 +6,7 @@
 //
 
 #import "ContactsViewController.h"
+#import "FriendPageViewController.h"
 #import "ContactsView.h"
 #import "Masonry.h"
 #import "UserModel.h"
@@ -77,7 +78,6 @@
     UserModel *user = self.friendsArray[indexPath.row];
     cell.textLabel.text = user.displayName.length > 0 ? user.displayName : user.uid;
     cell.detailTextLabel.text = user.email;
-    cell.selectionStyle = UITableViewCellSelectionStyleNone;
     return cell;
 }
 
@@ -88,11 +88,16 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    // 查看好友界面
+//    UserModel *friend = self.friendsArray[indexPath.row];
+//    FriendPageViewController *vc = [[FriendPageViewController alloc] init];
+//    vc.modalPresentationStyle = UIModalPresentationPageSheet;
+//    vc.displayName = friend.displayName;
+//    vc.email = friend.email;
+//    vc.avatarUrl = friend.photoUrl;    // 头像
+//    [self presentViewController:vc animated:YES completion:nil];
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
-#pragma mark - 查看好友界面
 
 #pragma mark - 访问好友UID
 - (void)getFirendsUID {
