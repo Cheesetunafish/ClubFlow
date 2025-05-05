@@ -9,6 +9,7 @@
 #import "ContactsView.h"
 #import "Masonry.h"
 @import FirebaseAuth;
+@import FirebaseDatabase;
 
 @interface ContactsViewController ()
 
@@ -65,7 +66,7 @@
         make.left.right.bottom.equalTo(self.view);
     }];
 }
-
+#pragma mark - 点击按钮逻辑
 - (void)addFriendButtonTapped {
     // 获取当前用户
     FIRUser *currentUser = [FIRAuth auth].currentUser;
@@ -75,18 +76,18 @@
     }
     
     // 创建邀请链接
-    NSString *inviteLink = [NSString stringWithFormat:@"myapp://invite?inviter=%@", currentUser.uid];
+    NSString *inviteLink = [NSString stringWithFormat:@"https://clubflow.com/invite?uid=%@", currentUser.uid];
     NSURL *url = [NSURL URLWithString:inviteLink];
     
     // 显示分享选项
     [self showShareOptionsWithURL:url];
 }
-
+// 提示框
 - (void)showShareOptionsWithURL:(NSURL *)url {
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"邀请好友"
                                                                  message:@"邀请链接已复制到剪贴板，您可以选择分享方式"
                                                           preferredStyle:UIAlertControllerStyleActionSheet];
-    
+    // 复制到剪贴板
     [alert addAction:[UIAlertAction actionWithTitle:@"复制链接"
                                             style:UIAlertActionStyleDefault
                                           handler:^(UIAlertAction * _Nonnull action) {
@@ -94,19 +95,69 @@
         pasteboard.string = url.absoluteString;
         [self showAlertWithTitle:@"提示" message:@"链接已复制到剪贴板"];
     }]];
-    
+    // 分享链接
     [alert addAction:[UIAlertAction actionWithTitle:@"分享"
                                             style:UIAlertActionStyleDefault
                                           handler:^(UIAlertAction * _Nonnull action) {
         UIActivityViewController *activityVC = [[UIActivityViewController alloc] initWithActivityItems:@[url] applicationActivities:nil];
         [self presentViewController:activityVC animated:YES completion:nil];
     }]];
+    // 搜索uid
+        [alert addAction:[UIAlertAction actionWithTitle:@"通过 UID 添加好友"
+                                                  style:UIAlertActionStyleDefault
+                                                handler:^(UIAlertAction * _Nonnull action) {
+            [self promptForFriendUID];
+        }]];
+
     
     [alert addAction:[UIAlertAction actionWithTitle:@"取消"
                                             style:UIAlertActionStyleCancel
                                           handler:nil]];
     
     [self presentViewController:alert animated:YES completion:nil];
+}
+// 输入框添加
+- (void)promptForFriendUID {
+    UIAlertController *uidAlert = [UIAlertController alertControllerWithTitle:@"添加好友"
+                                                                      message:@"请输入好友的 UID"
+                                                               preferredStyle:UIAlertControllerStyleAlert];
+    
+    [uidAlert addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
+        textField.placeholder = @"好友 UID";
+    }];
+    
+    [uidAlert addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil]];
+    
+    [uidAlert addAction:[UIAlertAction actionWithTitle:@"添加" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        NSString *friendUID = uidAlert.textFields.firstObject.text;
+        if (friendUID.length > 0) {
+            [self addFriendWithUID:friendUID];
+        }
+    }]];
+    
+    [self presentViewController:uidAlert animated:YES completion:nil];
+}
+#pragma mark - 添加好友逻辑
+- (void)addFriendWithUID:(NSString *)friendUID {
+    NSString *myUID = [FIRAuth auth].currentUser.uid;
+    if (!myUID || [friendUID isEqualToString:myUID]) {
+        [self showAlertWithTitle:@"错误" message:@"不能添加自己为好友"];
+        return;
+    }
+
+    FIRDatabaseReference *ref = [[FIRDatabase database] reference];
+    NSDictionary *updates = @{
+        [NSString stringWithFormat:@"users/%@/friends/%@", myUID, friendUID]: @YES,
+        [NSString stringWithFormat:@"users/%@/friends/%@", friendUID, myUID]: @YES
+    };
+
+    [ref updateChildValues:updates withCompletionBlock:^(NSError * _Nullable error, FIRDatabaseReference * _Nonnull ref) {
+        if (error) {
+            [self showAlertWithTitle:@"错误" message:@"添加好友失败"];
+        } else {
+            [self showAlertWithTitle:@"成功" message:@"好友添加成功"];
+        }
+    }];
 }
 
 - (void)showAlertWithTitle:(NSString *)title message:(NSString *)message {

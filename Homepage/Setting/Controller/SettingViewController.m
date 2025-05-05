@@ -11,6 +11,8 @@
 #import "USerInfoCell.h"
 #import "OptionCell.h"
 #import "UserModel.h"
+#import "CurrentUserManager.h"
+#import "SDWebImage.h"
 @import FirebaseAuth;
 
 // 定义组类型
@@ -39,6 +41,10 @@ typedef NS_ENUM(NSInteger, SectionType) {
     self.view.backgroundColor = [UIColor whiteColor];
     self.view = self.settingView;
     self.user = [[UserModel alloc] initWithFirebaseUser:[FIRAuth auth].currentUser];
+    
+    // 注册全局通知
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateUIWithUserInfo) name:UserProfileDidUpdateNotification object:nil];
+    
     self.options = @[
         @{@"title": @"修改密码", @"icon": @"lock_icon"},
         @{@"title": @"消息通知", @"icon": @"bell_icon"},
@@ -48,6 +54,15 @@ typedef NS_ENUM(NSInteger, SectionType) {
     
 }
 
+#pragma mark - 实现更新资料通知
+- (void)updateUIWithUserInfo {
+    UserModel *user = [CurrentUserManager sharedManager].currentUser;
+    [self.settingView.tableview reloadData];
+//    [self.avatarImageView sd_setImageWithURL:[NSURL URLWithString:self.user.photoUrl]];
+}
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
 
 #pragma mark - <UITableViewDataSource>
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {

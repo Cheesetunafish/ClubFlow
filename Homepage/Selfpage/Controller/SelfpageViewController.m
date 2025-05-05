@@ -10,6 +10,7 @@
 #import <SDWebImage/SDWebImage.h>
 #import <AFNetworking/AFNetworking.h>
 #import "UserModel.h"
+#import "CurrentUserManager.h"
 #import "Macros.h"
 @import FirebaseDatabase;
 @import FirebaseAuth;
@@ -66,30 +67,15 @@
         make.top.equalTo(self.changeAvatarLabel.mas_bottom);
         make.left.equalTo(self.view).offset(16);
         make.right.equalTo(self.view).offset(-16);
-        make.height.mas_equalTo(140);
+        make.height.mas_equalTo(195);
     }];
     
 }
 
-#pragma mark - 数据加载
-//- (void)fetchUserInfo {
-//    NSString *uid = [FIRAuth auth].currentUser.uid;
-//    if (!uid) return;
-//    FIRDatabaseReference *userRef = [[[FIRDatabase database] reference] child:@"users"];
-//    [[userRef child:uid] observeSingleEventOfType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
-//        NSDictionary *dict = snapshot.value;
-//        NSLog(@"print dict :%@", dict);
-//        self.username = dict[@"username"] ?: @"";
-//        self.email = dict[@"email"] ?: @"";
-//        self.avatarURL = dict[@"avatarURL"];
-//        [self.avatarImageView sd_setImageWithURL:[NSURL URLWithString:self.avatarURL] placeholderImage:[UIImage imageNamed:@"default_avatar"]];
-//        [self.tableView reloadData];
-//    }];
-//}
 
 #pragma mark - UITableViewDataSource
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section { 
-    return 2;
+    return 3;
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return 55;
@@ -117,6 +103,10 @@
         cell.textLabel.text = @"邮箱";
         cell.detailTextLabel.text = self.user.email ?: @"";
         cell.detailTextLabel.textColor = [UIColor lightGrayColor];
+    } else if (indexPath.row == 2) {
+        cell.textLabel.text = @"UID";
+        cell.detailTextLabel.text = self.user.uid ?: @"";
+        cell.detailTextLabel.textColor = [UIColor lightGrayColor];
     }
     return cell;
 
@@ -126,9 +116,21 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.row == 0) {
         [self showEditUsernameAlert];
+    } else if (indexPath.row == 2) {
+        [self pasteUID:self.user.uid];
     }
 }
 
+#pragma mark - 复制UID到剪贴板
+- (void)pasteUID:(NSString *)uid {
+    UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+    pasteboard.string = uid;
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"已复制"
+                                                                 message:nil
+                                                          preferredStyle:UIAlertControllerStyleAlert];
+    [alert addAction:[UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:nil]];
+    [self presentViewController:alert animated:YES completion:nil];
+}
 #pragma mark - 更换头像
 - (void)changeAvatar {
     UIImagePickerController *picker = [[UIImagePickerController alloc] init];
@@ -144,6 +146,8 @@
     if (image) {
         self.avatarImageView.image = image;
         [self uploadAvatar:image];
+        // TODO: 更新头像
+//        [[CurrentUserManager sharedManager] updateWithDisplayName:nil photoURL:image];
     }
     [picker dismissViewControllerAnimated:YES completion:nil];
 }
@@ -195,6 +199,7 @@
             // 本地模型
             self.username = newName;
             self.user.displayName = newName;
+            [[CurrentUserManager sharedManager] updateWithDisplayName:newName photoURL:nil];
             [self.tableView reloadData];
         }
     }]];
