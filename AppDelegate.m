@@ -175,10 +175,10 @@
     UINavigationController *editNav = [[UINavigationController alloc] initWithRootViewController:editVC];
     UINavigationController *docNav = [[UINavigationController alloc] initWithRootViewController:documentVC];
     
-    homeVC.tabBarItem.title = @"留言板";
+    homeVC.tabBarItem.title = @"首页";
     contactVC.tabBarItem.title = @"通讯录";
     editNav.tabBarItem.title = @"编辑";
-    docNav.tabBarItem.title = @"我的文档";
+    docNav.tabBarItem.title = @"共享文档";
     
     homeVC.tabBarItem.image = [UIImage imageNamed:@"HomeBar"];
     homeVC.tabBarItem.selectedImage = [[UIImage imageNamed:@"HomeBar"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];

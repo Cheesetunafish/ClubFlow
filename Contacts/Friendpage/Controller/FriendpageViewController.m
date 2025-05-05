@@ -6,7 +6,6 @@
 //
 
 #import "FriendpageViewController.h"
-#import "FriendPageViewController.h"
 #import "Masonry.h"
 #import "SDWebImage.h"
 

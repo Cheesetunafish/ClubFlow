@@ -10,6 +10,7 @@
 #import "ContactsView.h"
 #import "Masonry.h"
 #import "UserModel.h"
+#import "FriendCacheManager.h"
 #import "Macros.h"
 @import FirebaseAuth;
 @import FirebaseDatabase;
@@ -36,7 +37,7 @@
     [super viewDidLoad];
     [self setupUI];
     self.user = [[UserModel alloc] initWithFirebaseUser:[FIRAuth auth].currentUser];
-    [self getFirendsUID];
+    [self fetchFriendCache];
 }
 
 - (void)setupUI {
@@ -67,6 +68,16 @@
         make.left.right.bottom.equalTo(self.view);
     }];
 }
+#pragma mark - 实现缓存
+- (void)fetchFriendCache {
+    NSArray *cached = [FriendCacheManager sharedManager].cachedFriends;
+    if (cached) {
+        self.friendsArray = cached.mutableCopy;
+        [self.tableView reloadData];
+    } else {
+        [self getFirendsUID];
+    }
+}
 
 #pragma mark - <UITableViewDataSource>
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -88,13 +99,13 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-//    UserModel *friend = self.friendsArray[indexPath.row];
-//    FriendPageViewController *vc = [[FriendPageViewController alloc] init];
-//    vc.modalPresentationStyle = UIModalPresentationPageSheet;
-//    vc.displayName = friend.displayName;
-//    vc.email = friend.email;
-//    vc.avatarUrl = friend.photoUrl;    // 头像
-//    [self presentViewController:vc animated:YES completion:nil];
+    UserModel *friend = self.friendsArray[indexPath.row];
+    FriendPageViewController *vc = [[FriendPageViewController alloc] init];
+    vc.displayName = friend.displayName;
+    vc.email = friend.email;
+    vc.avatarUrl = friend.photoUrl;    // 头像
+    [self.navigationController pushViewController:vc animated:YES];
+    NSLog(@"select");
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
@@ -133,6 +144,7 @@
                 NSDictionary *userDict = snapshot.value;
                 UserModel *friend = [[UserModel alloc] initWithDictionary:userDict];
                 [self.friendsArray addObject:friend];
+                [FriendCacheManager sharedManager].cachedFriends = self.friendsArray;
                 NSLog(@"好友：%@ (%@), arrray:(%@)", friend.displayName, friend.email, self.friendsArray);
             }
             dispatch_group_leave(group);
