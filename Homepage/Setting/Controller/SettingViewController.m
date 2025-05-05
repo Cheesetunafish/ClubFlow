@@ -7,6 +7,7 @@
 
 #import "SettingViewController.h"
 #import "SelfpageViewController.h"
+#import "LoginViewController.h"
 #import "SettingView.h"
 #import "USerInfoCell.h"
 #import "OptionCell.h"
@@ -150,6 +151,22 @@ typedef NS_ENUM(NSInteger, SectionType) {
     
 }
 - (void)selectTypeLogout {
+    NSError *signOutError;
+        BOOL success = [[FIRAuth auth] signOut:&signOutError];
+        if (!success) {
+            NSLog(@"登出失败：%@", signOutError.localizedDescription);
+            return;
+        }
+        // 清除本地缓存，如单例、用户数据等
+        [[CurrentUserManager sharedManager] clearUser];
+        // 跳转到登录页面
+        UIViewController *loginVC = [[LoginViewController alloc] init];
+        UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:loginVC];
+
+        // 设置根视图控制器为登录页
+        UIWindow *window = UIApplication.sharedApplication.delegate.window;
+        window.rootViewController = nav;
+        [window makeKeyAndVisible];
     
 }
 

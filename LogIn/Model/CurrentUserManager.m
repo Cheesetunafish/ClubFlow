@@ -55,5 +55,8 @@ NSString * const UserProfileDidUpdateNotification = @"UserProfileDidUpdateNotifi
     [[NSNotificationCenter defaultCenter] postNotificationName:UserProfileDidUpdateNotification object:nil];
 }
 
+- (void)clearUser {
+    self.currentUser = nil;
+}
 
 @end

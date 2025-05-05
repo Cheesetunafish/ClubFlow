@@ -23,6 +23,9 @@ extern NSString * const UserProfileDidUpdateNotification;
 
 /// 手动触发通知（例如登录后同步）
 - (void)broadcastUserUpdate;
+
+/// 清理缓存
+- (void)clearUser;
 @end
 
 NS_ASSUME_NONNULL_END

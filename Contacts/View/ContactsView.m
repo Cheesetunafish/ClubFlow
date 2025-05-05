@@ -12,13 +12,10 @@
 - (instancetype)init {
     self = [super init];
     if (self) {
-        [self showUpView];
+        
     }
     return self;
 }
 
-- (void)showUpView {
-    self.backgroundColor = [UIColor blueColor];
-}
 
 @end
