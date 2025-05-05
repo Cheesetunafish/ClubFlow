@@ -10,17 +10,16 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface CommentModel : NSObject
-@property (nonatomic, strong) NSString *author;
-@property (nonatomic, strong) NSString *content;
-@property (nonatomic, strong) NSString *time;
-@property (nonatomic, assign) NSInteger likes;
-@property (nonatomic, strong) NSArray<CommentModel *> *replies;
 
-- (instancetype)initWithAuthor:(NSString *)author
-                       content:(NSString *)content
-                          time:(NSString *)time
-                         likes:(NSInteger)likes
-                       replies:(NSArray<CommentModel *> *)replies;
+@property (nonatomic, copy) NSString *commentID; // 可选，用于标识
+
+@property (nonatomic, copy) NSString *displayName;
+
+@property (nonatomic, copy) NSString *text;
+
+@property (nonatomic, copy) NSString *timeString;
+@property (nonatomic, strong) NSArray<CommentModel *> *replyArray;
+
+- (instancetype)initWithDictionary:(NSDictionary *)dic;
 @end
-
 NS_ASSUME_NONNULL_END

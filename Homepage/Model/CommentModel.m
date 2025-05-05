@@ -10,20 +10,34 @@
 
 @implementation CommentModel
 
-- (instancetype)initWithAuthor:(NSString *)author
-                       content:(NSString *)content
-                          time:(NSString *)time
-                         likes:(NSInteger)likes
-                       replies:(NSArray<CommentModel *> *)replies {
+- (instancetype)initWithDictionary:(NSDictionary *)dic {
     self = [super init];
     if (self) {
-        self.author = author;
-        self.content = content;
-        self.time = time;
-        self.likes = likes;
-        self.replies = replies;
+        self.displayName = dic[@"displayName"];
+        self.text = dic[@"text"];
+        
+        NSTimeInterval timestamp = [dic[@"timestamp"] doubleValue];
+        self.timeString = [self formatTimestamp:timestamp];
+        
+        NSDictionary *repliesDict = dic[@"replies"];
+        NSMutableArray *replies = [NSMutableArray array];
+        if ([repliesDict isKindOfClass:[NSDictionary class]]) {
+            for (NSString *key in repliesDict) {
+                NSDictionary *replyDic = repliesDict[key];
+                CommentModel *replyModel = [[CommentModel alloc] initWithDictionary:replyDic];
+                [replies addObject:replyModel];
+            }
+        }
+        self.replyArray = replies;
     }
     return self;
+}
+
+- (NSString *)formatTimestamp:(NSTimeInterval)timestamp {
+    NSDate *date = [NSDate dateWithTimeIntervalSince1970:timestamp];
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    formatter.dateFormat = @"yyyy-MM-dd HH:mm";
+    return [formatter stringFromDate:date];
 }
 
 @end

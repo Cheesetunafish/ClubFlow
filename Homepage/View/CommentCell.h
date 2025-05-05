@@ -10,13 +10,14 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class CommentModel;
+
 @interface CommentCell : UITableViewCell
-@property (nonatomic, strong) UILabel *authorLabel;
-@property (nonatomic, strong) UILabel *contentLabel;
-@property (nonatomic, strong) UILabel *timeLabel;
-@property (nonatomic, strong) UIButton *likeButton;
 
-- (void)configureWithComment:(CommentModel *)comment;
+@property (nonatomic, strong) CommentModel *commentModel;
+@property (nonatomic, copy) void(^replyAction)(CommentModel *comment);
+
+- (void)setCommentModel:(CommentModel *)commentModel;
+
 @end
-
 NS_ASSUME_NONNULL_END
