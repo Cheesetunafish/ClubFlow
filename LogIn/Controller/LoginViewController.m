@@ -33,7 +33,7 @@
 }
 
 
-#pragma mark - Animation
+#pragma mark - 动画
 - (void)showUpAnimation {
     self.loginView.emailField.alpha = 0;
     self.loginView.passwordField.alpha = 0;
@@ -85,8 +85,7 @@
 }
 
 
-#pragma mark - action
-// 注册按钮点击
+#pragma mark - 注册按钮点击
 - (void)jumpToSignPage {
     if (self.signinPage) {
         [self.navigationController pushViewController:self.signinPage animated:YES];
@@ -94,7 +93,7 @@
         NSLog(@"self.signinPage is nil!");
     }
 }
-// 登录按钮点击方法
+#pragma mark - 登录按钮点击方法
 - (void)logInToHome {
     NSString *email = self.loginView.emailField.text;
     NSString *password = self.loginView.passwordField.text;
@@ -131,13 +130,13 @@
     }
 }
 
-// 邮箱格式验证
+#pragma mark - 邮箱格式验证
 - (BOOL)isValidEmail:(NSString *)email {
     NSString *emailRegex = @"[A-Z0-9a-z._%+-]+@[A-Za-z0-0.-]+\\.[A-Za-z]{2,}";
     NSPredicate *emailTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", emailRegex];
     return [emailTest evaluateWithObject:email];
 }
-// 登录成功进入主页
+#pragma mark - 登录成功进入主页
 - (void)proceedToMainScreenWithUser:(UserModel *)user {
     NSLog(@"用户数据：%@", [user toDictionary]);
     
@@ -153,7 +152,7 @@
         [appDelegate processFriendshipWithInviter:pendingInviterUID];
     }
 }
-// 展示错误提示
+#pragma mark - 展示错误提示
 - (void)showErrorHint:(NSString *)errorText {
     if (self.loginView.errorText.hidden == YES) {
         self.loginView.errorText.hidden = NO;
@@ -161,7 +160,7 @@
     self.loginView.errorText.text = errorText;
     return;
 }
-
+#pragma mark - 检查是否有待处理的好友邀请
 - (void)loginSuccess {
     // 检查是否有待处理的好友邀请
     NSString *pendingInviterUID = [[NSUserDefaults standardUserDefaults] objectForKey:@"pendingInviterUID"];

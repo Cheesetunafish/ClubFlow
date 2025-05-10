@@ -35,7 +35,7 @@
     [self setupUI];
 }
 
--(void) setupUI {
+- (void) setupUI {
     self.title = @"留言板";
     self.view.backgroundColor = [UIColor whiteColor];
     self.comments = [NSMutableArray array];

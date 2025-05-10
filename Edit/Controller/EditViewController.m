@@ -292,11 +292,11 @@
 }
 
 #pragma mark - Actions
-
+// 点击取消按钮
 - (void)cancelButtonTapped {
     [self dismissViewControllerAnimated:YES completion:nil];
 }
-
+// 点击完成按钮
 - (void)doneButtonTapped {
     NSDictionary *content = [self.editView getCurrentContent];
     NSString *title = content[@"title"];

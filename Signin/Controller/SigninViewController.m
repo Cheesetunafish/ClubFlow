@@ -36,7 +36,6 @@
 - (void)startCountdown {
     self.countdown = 60;
     self.timer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(updateCountDown) userInfo:nil repeats:YES];
-    // TODO: 👀
 }
 
 - (void)updateCountDown {
@@ -65,7 +64,7 @@
 - (void)backToLoginPage {
     [self.navigationController popViewControllerAnimated:YES];
 }
-// 发送验证按钮
+#pragma mark - 发送验证按钮
 - (void)sendCodeonTapped {
     NSString *email = self.signinView.emailField.text;
     
@@ -83,11 +82,11 @@
                 NSLog(@"发送失败:%@", errorMessage);
                 self.signinView.sendVerityButton.enabled = YES;
                 [self.timer invalidate];
-                self.signinView.sendVerityButton.titleLabel.text = @"重新发送";//TODO: 👀
+                self.signinView.sendVerityButton.titleLabel.text = @"重新发送";
             }
     }];
 }
-// 点击注册按钮
+#pragma mark - 点击注册按钮
 - (void)signInOnTapped {
     NSString *email = self.signinView.emailField.text;
     NSString *password = self.signinView.firstPasswdField.text;
@@ -100,9 +99,8 @@
             NSLog(@"注册成功，用户uid:%@", user.uid);
     }];
 }
-
+#pragma mark - 转到登录页面
 - (void)proceedToSignInPage {
-    // 转到登录页面
     [self.navigationController popViewControllerAnimated:YES];
 }
 

@@ -46,17 +46,17 @@
     
     return YES;
 }
-
+// 处理应用启动时的动态链接
 - (void)setupDynamicLinks {
-    // 处理应用启动时的动态链接
+    
     FIRDynamicLink *dynamicLink = [[FIRDynamicLinks dynamicLinks] dynamicLinkFromCustomSchemeURL:[NSURL URLWithString:@"com.clubflow.app"]];
     if (dynamicLink) {
         [self handleDynamicLink:dynamicLink];
     }
 }
-
+// 处理通用链接
 - (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray<id<UIUserActivityRestoring>> * _Nullable))restorationHandler {
-    // 处理通用链接
+    
     return [[FIRDynamicLinks dynamicLinks] handleUniversalLink:userActivity.webpageURL
                                                     completion:^(FIRDynamicLink * _Nullable dynamicLink, NSError * _Nullable error) {
         if (dynamicLink) {
@@ -64,9 +64,8 @@
         }
     }];
 }
-
+// 处理自定义URL scheme
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
-    // 处理自定义URL scheme
     if ([url.scheme isEqualToString:@"myapp"]) {
         if ([url.host isEqualToString:@"invite"]) {
             // 解析URL参数
